@@ -1,18 +1,18 @@
 # MySQL / SSH helper for Golang
 
 ## Usage
-|required|variable|type|
-|---|---|---|
-|Mandatory|DbHost|string|
-|Mandatory|DbPass|string|
-|Mandatory|DbUser|string|
-|Mandatory|DbPort|string|
-|Mandatory|UseSSH|bool|
-|Optional|DbName|string|
-|Optional (SSH)|SshKeyPath|string|
-|Optional (SSH)|SshHost|string|
-|Optional (SSH)|SshUser|string|
-|Optional (SSH)|SshPort|string|
+|required|variable|type|default|
+|---|---|---|---|
+|Mandatory|DbHost|string||
+|Mandatory|DbPass|string||
+|Mandatory|DbUser|string||
+|Optional|DbPort|string|3306|
+|Mandatory|UseSSH|bool|false|
+|Optional|DbName|string||
+|Optional (SSH)|SshKeyPath|string||
+|Optional (SSH)|SshHost|string||
+|Optional (SSH)|SshUser|string||
+|Optional (SSH)|SshPort|string|22|
 
 ## Example
 ```go
@@ -25,7 +25,7 @@ import (
 
 
 func main() {
-	dbConf := pkg.MySQLConfig {
+	db := pkg.MySQLConfig {
 		DbHost: os.Getenv("MYSQL_HOSTNAME"),
 		DbPass: os.Getenv("MYSQL_PASSWORD"),
 		DbUser: os.Getenv("MYSQL_USERNAME"),
@@ -38,10 +38,10 @@ func main() {
 		SshPort: os.Getenv("SSH_PORT"),
 	}
 
-	db, err := dbConf.Connect()
+	cnx, err := db.Connect()
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	defer cnx.Close()
 }
 ```

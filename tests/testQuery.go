@@ -3,13 +3,12 @@ package main
 import (
 	"MySQLHelper/pkg"
 	"fmt"
-	"time"
 	"os"
 )
 
 
 func main() {
-	dbConf := pkg.MySQLConfig {
+	db := pkg.MySQLConfig {
 		DbHost: os.Getenv("MYSQL_HOSTNAME"),
 		DbPass: os.Getenv("MYSQL_PASSWORD"),
 		DbUser: os.Getenv("MYSQL_USERNAME"),
@@ -22,33 +21,25 @@ func main() {
 		SshPort: os.Getenv("SSH_PORT"),
 	}
 
-	db, err := dbConf.Connect()
+	cnx, err := db.Connect()
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	defer cnx.Close()
 
-	rows, err := db.Query("SELECT NOW() dt")
+	rows, err := cnx.Query("SELECT 'Hello World';")
 	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
 
 	type row struct {
-		now time.Time
+		hello string
 	}
 
 	for rows.Next() {
 		var r row
-		rows.Scan(&r.now)
-
-		var dt string
-		if r.now.IsZero() {
-			dt = "0"
-		} else {
-			dt = r.now.Format(time.RFC3339)
-		}
-
-		fmt.Printf("datetime: %s\n", dt)
+		rows.Scan(&r.hello)
+		fmt.Printf("%s\n", r.hello)
 	}
 }
