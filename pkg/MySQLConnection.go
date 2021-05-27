@@ -6,7 +6,6 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
-	"os"
 
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/ssh"
@@ -20,33 +19,33 @@ func (sshDialer *viaSSHDialer) Dial(ctx context.Context, addr string) (net.Conn,
 	return sshDialer.client.Dial("tcp", addr)
 }
 
-func MySQLConnection(useSSH bool) (db *sql.DB) {
-	var dbHost string = os.Getenv("MYSQL_HOSTNAME")
-	var dbPass string = os.Getenv("MYSQL_PASSWORD")
-	var dbUser string = os.Getenv("MYSQL_USERNAME")
-	var dbPort string = os.Getenv("MYSQL_PORT")
-	var dbName string = os.Getenv("MYSQL_DATABASE")
-	var sshKeyPath string
-	var sshHost string
-	var sshUser string
-	var sshPort string
+type MySQLConfig struct {
+	DbHost string
+	DbPass string
+	DbUser string
+	DbPort string
+	DbName string
+	UseSSH bool
+	SshKeyPath string
+	SshHost string
+	SshUser string
+	SshPort string
+}
+
+func (m *MySQLConfig) Connect() (*sql.DB, error) {
 	var dialContext string = "tcp"
 
-	if useSSH {
-		sshKeyPath = os.Getenv("SSH_KEYPATH")
-		sshHost = os.Getenv("SSH_HOST")
-		sshUser = os.Getenv("SSH_USER")
-		sshPort = os.Getenv("SSH_PORT")
-		sshtun := internal.SSHClient(&sshHost, &sshUser, &sshKeyPath, &sshPort)
+	if m.UseSSH {
+		sshtun, err := internal.SSHClient(&m.SshHost, &m.SshUser, &m.SshKeyPath, &m.SshPort)
+		if err != nil {
+			return nil, err
+		}
 
 		dialContext = "mysql+tcp"
 		mysql.RegisterDialContext(dialContext, (&viaSSHDialer{sshtun}).Dial)
 	}
 
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@%s(%s:%s)/%s?parseTime=true&columnsWithAlias=true", dbUser, dbPass, dialContext, dbHost, dbPort, dbName))
-	if err != nil {
-		panic(err)
-	}
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@%s(%s:%s)/%s?parseTime=true&columnsWithAlias=true", m.DbUser, m.DbPass, dialContext, m.DbHost, m.DbPort, m.DbName))
 
-	return db
+	return db, err
 }
