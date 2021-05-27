@@ -4,9 +4,9 @@ import (
 	"MySQLHelper/internal"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"net"
-	"errors"
 
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/ssh"
@@ -21,34 +21,34 @@ func (sshDialer *viaSSHDialer) Dial(ctx context.Context, addr string) (net.Conn,
 }
 
 type MySQLConfig struct {
-	DbHost string
-	DbPass string
-	DbUser string
-	DbPort string
-	DbName string
-	UseSSH bool
+	DbHost     string
+	DbPass     string
+	DbUser     string
+	DbPort     string
+	DbName     string
+	UseSSH     bool
 	SshKeyPath string
-	SshHost string
-	SshUser string
-	SshPort string
+	SshHost    string
+	SshUser    string
+	SshPort    string
 }
-  
-func(d *MySQLConfig) fill_defaults(){
-    if d.DbPort == "" {
-        d.DbPort = "3306"
-    }
-      
-    if d.SshPort == "" {
-        d.SshPort = "22"
-    }
+
+func (d *MySQLConfig) fill_defaults() {
+	if d.DbPort == "" {
+		d.DbPort = "3306"
+	}
+
+	if d.SshPort == "" {
+		d.SshPort = "22"
+	}
 }
 
 func (m *MySQLConfig) Connect() (*sql.DB, error) {
 	m.fill_defaults()
 	var dialContext string = "tcp"
 
-	if m.DbHost == "" || m.DbHost == "" || m.DbHost == "" {
-		return nil, errors.New("Database parameters missing")
+	if m.DbHost == "" || m.DbPass == "" || m.DbUser == "" {
+		return nil, errors.New("database parameters missing")
 	}
 
 	if m.UseSSH {
