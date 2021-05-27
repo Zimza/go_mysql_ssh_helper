@@ -19,23 +19,20 @@
 package main
 
 import (
-	"MySQLHelper/pkg"
-	"os"
+	"github.com/zimza/go-mysql-ssh-helper/pkg"
 )
-
 
 func main() {
 	db := pkg.MySQLConfig {
-		DbHost: os.Getenv("MYSQL_HOSTNAME"),
-		DbPass: os.Getenv("MYSQL_PASSWORD"),
-		DbUser: os.Getenv("MYSQL_USERNAME"),
-		DbPort: os.Getenv("MYSQL_PORT"),
-		DbName: os.Getenv("MYSQL_DATABASE"),
+		DbHost: "mydb.hostname.com",
+		DbUser: "john",
+		DbPass: "1234",
+		DbPort: "3306",
 		UseSSH: true,
-		SshKeyPath: os.Getenv("SSH_KEYPATH"),
-		SshHost: os.Getenv("SSH_HOST"),
-		SshUser: os.Getenv("SSH_USER"),
-		SshPort: os.Getenv("SSH_PORT"),
+		SshKeyPath: "/home/user/.ssh/id_rsa",
+		SshHost: "ssh.hostname.com",
+		SshUser: "john",
+		SshPort: "22",
 	}
 
 	cnx, err := db.Connect()
@@ -44,4 +41,26 @@ func main() {
 	}
 	defer cnx.Close()
 }
+```
+
+### Using environment variables
+```go
+import (
+	"github.com/zimza/go-mysql-ssh-helper/pkg"
+	"os"
+)
+...
+	db := pkg.MySQLConfig {
+		DbHost: os.Getenv("MYSQL_HOSTNAME"),
+		DbUser: os.Getenv("MYSQL_USERNAME"),
+		DbPass: os.Getenv("MYSQL_PASSWORD"),
+		DbPort: os.Getenv("MYSQL_PORT"),
+		DbName: os.Getenv("MYSQL_DATABASE"),
+		UseSSH: true,
+		SshKeyPath: os.Getenv("SSH_KEYPATH"),
+		SshHost: os.Getenv("SSH_HOST"),
+		SshUser: os.Getenv("SSH_USER"),
+		SshPort: os.Getenv("SSH_PORT"),
+	}
+...
 ```

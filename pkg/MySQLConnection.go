@@ -1,11 +1,11 @@
 package pkg
 
 import (
-	"MySQLHelper/internal"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/zimza/go-mysql-ssh-helper/internal"
 	"net"
 
 	"github.com/go-sql-driver/mysql"
