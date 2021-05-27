@@ -3,16 +3,16 @@
 ## Usage
 |required|variable|type|default|
 |---|---|---|---|
-|Mandatory|DbHost|string||
-|Mandatory|DbPass|string||
-|Mandatory|DbUser|string||
-|Optional|DbPort|string|3306|
-|Mandatory|UseSSH|bool|false|
-|Optional|DbName|string||
-|Optional (SSH)|SshKeyPath|string||
-|Optional (SSH)|SshHost|string||
-|Optional (SSH)|SshUser|string||
-|Optional (SSH)|SshPort|string|22|
+|mandatory|DbHost|string||
+|mandatory|DbPass|string||
+|mandatory|DbUser|string||
+|optional|DbPort|string|3306|
+|optional|DbName|string||
+|optional|UseSSH|bool|false|
+|ssh: mandatory|SshKeyPath|string||
+|ssh: mandatory|SshHost|string||
+|ssh: mandatory|SshUser|string||
+|ssh: optional|SshPort|string|22|
 
 ## Example
 ```go
