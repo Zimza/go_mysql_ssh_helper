@@ -1,14 +1,15 @@
-# MySQL / SSH helper for Golang
+# Go MySQL SSH Helper
+Simple MySQL connection helper with optional SSH tunneling for Golang.
 
-## Usage
-|required|variable|type|default|
+## Parameters
+|type|variable|type|default|
 |---|---|---|---|
-|mandatory|DbHost|string||
-|mandatory|DbPass|string||
-|mandatory|DbUser|string||
-|optional|DbPort|string|3306|
-|optional|DbName|string||
-|optional|UseSSH|bool|false|
+|sql: mandatory|DbHost|string||
+|sql: mandatory|DbPass|string||
+|sql: mandatory|DbUser|string||
+|sql: optional|DbPort|string|3306|
+|sql: optional|DbName|string||
+|ssh: optional|UseSSH|bool|false|
 |ssh: mandatory|SshKeyPath|string||
 |ssh: mandatory|SshHost|string||
 |ssh: mandatory|SshUser|string||
@@ -41,26 +42,4 @@ func main() {
 	}
 	defer cnx.Close()
 }
-```
-
-### Using environment variables
-```go
-import (
-	"github.com/zimza/go-mysql-ssh-helper/pkg"
-	"os"
-)
-...
-	db := pkg.MySQLConfig {
-		DbHost: os.Getenv("MYSQL_HOSTNAME"),
-		DbUser: os.Getenv("MYSQL_USERNAME"),
-		DbPass: os.Getenv("MYSQL_PASSWORD"),
-		DbPort: os.Getenv("MYSQL_PORT"),
-		DbName: os.Getenv("MYSQL_DATABASE"),
-		UseSSH: true,
-		SshKeyPath: os.Getenv("SSH_KEYPATH"),
-		SshHost: os.Getenv("SSH_HOST"),
-		SshUser: os.Getenv("SSH_USER"),
-		SshPort: os.Getenv("SSH_PORT"),
-	}
-...
 ```

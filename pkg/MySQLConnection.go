@@ -5,8 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/zimza/go-mysql-ssh-helper/internal"
 	"net"
+
+	"github.com/zimza/go-mysql-ssh-helper/internal"
 
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/ssh"
